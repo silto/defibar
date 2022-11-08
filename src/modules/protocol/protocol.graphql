@@ -1,0 +1,16 @@
+type Protocol {
+  id: ID!
+  slug: String!
+  name: String!
+  url: String!
+  symbol: String
+  description: String
+  chains: [String]
+  logoUrl: String
+  tvl: Float
+  parentProtocol: String
+}
+
+type Query {
+  searchProtocol(query: String): [Protocol]!
+}

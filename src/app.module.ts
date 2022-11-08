@@ -1,11 +1,11 @@
 import { join } from "path";
-import { DateResolver, DateTimeResolver, GraphQLJSONObject } from "graphql-scalars";
+// import { DateResolver, DateTimeResolver, GraphQLJSONObject } from "graphql-scalars";
 import { Module } from "@nestjs/common";
 import { GraphQLModule } from "@nestjs/graphql";
 import { ApolloDriver, ApolloDriverConfig } from "@nestjs/apollo";
 import { MongooseModule } from "@nestjs/mongoose";
-import { AppController } from "./app.controller";
-import { AppService } from "./app.service";
+import { AppService } from "@/app.service";
+import { ProtocolModule } from "@/modules/protocol/protocol.module";
 
 @Module({
   imports: [
@@ -21,16 +21,17 @@ import { AppService } from "./app.service";
         outputAs: "class",
       },
       resolvers: {
-        Date: DateResolver,
-        DateTime: DateTimeResolver,
-        JSONObject: GraphQLJSONObject,
+        // Date: DateResolver,
+        // DateTime: DateTimeResolver,
+        // JSONObject: GraphQLJSONObject,
       },
       playground: process.env.GRAPHQL_PLAYGROUND === "true",
       debug: process.env.NODE_ENV === "development",
     }),
     MongooseModule.forRoot(process.env.DATABASE_URL),
+    ProtocolModule,
   ],
-  controllers: [AppController],
+  controllers: [],
   providers: [AppService],
 })
 export class AppModule {}
