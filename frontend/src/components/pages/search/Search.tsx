@@ -4,11 +4,11 @@ import styled from 'styled-components';
 import { gql } from '@apollo/client';
 
 import SearchInput from '@/components/searchInput';
+import DEFIBAR from '@/public/DEFIBAR_title.svg';
 
 import { useSearchProtocolLazyQuery } from '@/types/schema';
-
 const Container = styled.div`
-  background-color: #fafafa;
+  background-color: ${({ theme }) => theme.background};
   display: flex;
   flex-direction: column;
   flex-grow: 1;
@@ -17,9 +17,9 @@ const Container = styled.div`
   align-items: center;
 `;
 
-const Title = styled.h1`
-  color: orange;
-  font-size: 80px;
+const Title = styled.div`
+  max-width: 800px;
+  width: 100%;
 `;
 
 const InputContainer = styled.div``;
@@ -66,7 +66,9 @@ export const Search: NextPage = () => {
   return (
     <div>
       <Container>
-        <Title>Quick DApp</Title>
+        <Title>
+          <DEFIBAR />
+        </Title>
         <InputContainer>
           <SearchInput placeholder="Search" onChange={changeHandler} />
         </InputContainer>

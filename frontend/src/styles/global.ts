@@ -7,3 +7,11 @@ export const GlobalStyles = createGlobalStyle`
     box-sizing: border-box;
   }
 `;
+
+const theme = {
+  background: '#141410',
+  textDefault: '#ececec',
+  gold: '#d4af37',
+};
+
+export default theme;
