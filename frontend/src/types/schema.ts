@@ -29,7 +29,7 @@ export type Protocol = {
 };
 
 export type Query = {
-  searchProtocol: Array<Maybe<Protocol>>;
+  searchProtocol: Array<Protocol>;
 };
 
 
@@ -42,7 +42,7 @@ export type SearchProtocolQueryVariables = Exact<{
 }>;
 
 
-export type SearchProtocolQuery = { searchProtocol: Array<{ id: string, name: string, url: string, symbol?: string | null, tvl?: number | null } | null> };
+export type SearchProtocolQuery = { searchProtocol: Array<{ id: string, name: string, url: string, logoUrl?: string | null, symbol?: string | null, tvl?: number | null }> };
 
 
 export const SearchProtocolDocument = gql`
@@ -51,6 +51,7 @@ export const SearchProtocolDocument = gql`
     id
     name
     url
+    logoUrl
     symbol
     tvl
   }

@@ -1,10 +1,32 @@
 import { createGlobalStyle } from 'styled-components';
 
 export const GlobalStyles = createGlobalStyle`
+
+  @font-face {
+    font-family: 'Roboto-Slab';
+    src: url('/fonts/RobotoSlab-VariableFont_wght.ttf') format('truetype');
+    font-weight: 100 900;
+    font-display: swap;
+  }
+
+  *,
+  *::before,
+  *::after,
+  html {
+    box-sizing: border-box;
+  }
   body {
     margin: 0;
     padding: 0;
-    box-sizing: border-box;
+
+    font-family: 'Roboto-Slab', serif;
+    
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  svg {
+    pointer-events: none;
   }
 `;
 
