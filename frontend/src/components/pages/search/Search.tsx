@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import type { NextPage } from 'next';
 import styled from 'styled-components';
 import { gql } from '@apollo/client';
@@ -6,7 +6,7 @@ import { gql } from '@apollo/client';
 import SearchInput from '@/components/searchInput';
 import DEFIBAR from '@/public/DEFIBAR_title.svg';
 // import borderImage from '@/public/border-image.svg';
-import { Protocol, useSearchProtocolLazyQuery } from '@/types/schema';
+import { Protocol, useSearchProtocolQuery } from '@/types/schema';
 
 const PageContainer = styled.div`
   background-color: ${({ theme }) => theme.background};
@@ -27,21 +27,23 @@ const PageContainer = styled.div`
 const Container = styled.div`
   position: absolute;
   width: 100%;
+  height: 80vh;
+  padding: 0 20px 20px;
   top: 20%;
   display: flex;
   flex-direction: column;
   flex-grow: 1;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
 `;
 
 const Title = styled.div`
   max-width: 600px;
-  max-height: 20vh;
-  height: 100%;
+  max-height: 154px;
+  height: 20vh;
   width: 100%;
-  margin: 0 0 20px;
-  padding: 0 40px;
+  margin: 0;
+  padding: 0 40px 20px;
   display: flex;
   > svg {
     width: 100%;
@@ -49,15 +51,17 @@ const Title = styled.div`
   }
 `;
 
-const InputContainer = styled.div`
+const InputContainer = styled.form`
   width: 100%;
   max-width: 500px;
-  height: 60px;
+  height: 50px;
   padding: 0 40px;
+  flex-grow: 0;
+  flex-shrink: 0;
 `;
 
 const ResultsContainer = styled.div`
-  margin-top: 20px;
+  margin-top: 30px;
   width: 100%;
   max-width: 800px;
   display: flex;
@@ -66,6 +70,7 @@ const ResultsContainer = styled.div`
   justify-content: center;
   align-items: flex-start;
   gap: 10px 20px;
+  overflow: scroll;
 `;
 
 const ProtocolBlock = styled.a`
@@ -111,26 +116,44 @@ const SEARCH_PROTOCOL_QUERY = gql`
   }
 `;
 
-export const Search: NextPage = () => {
-  const [query, setQuery] = useState('');
+interface SearchFormElements extends HTMLFormControlsCollection {
+  protocolQuery: HTMLInputElement;
+}
 
-  const [searchProtocol, { loading: searchLoading, error: searchError, data: searchData }] = useSearchProtocolLazyQuery(
-    {
-      query: SEARCH_PROTOCOL_QUERY,
-      fetchPolicy: 'network-only',
-    },
-  );
+interface SearchFormElement extends HTMLFormElement {
+  readonly elements: SearchFormElements;
+}
+
+export const Search: NextPage = () => {
+  const searchInput = React.useRef<HTMLInputElement>(null);
+  const [query, setQuery] = useState('');
+  const [delayDebounce, setDelayDebounce] = useState<ReturnType<typeof setTimeout> | null>(null);
+  const {
+    loading: searchLoading,
+    error: searchError,
+    data: searchData,
+    refetch,
+  } = useSearchProtocolQuery({
+    query: SEARCH_PROTOCOL_QUERY,
+    fetchPolicy: 'network-only',
+  });
 
   useEffect(() => {
-    const delayDebounceFn = setTimeout(async () => {
-      const res = await searchProtocol({ variables: { query } });
+    delayDebounce && clearTimeout(delayDebounce);
+    const delayDebounceFn = setTimeout(() => {
+      refetch({ query });
       // console.log(res?.data?.searchProtocol);
     }, 400);
-
-    return () => clearTimeout(delayDebounceFn);
+    setDelayDebounce(delayDebounceFn);
+    return () => {
+      delayDebounce && clearTimeout(delayDebounce);
+    };
   }, [query]);
-  useEffect(() => {
-    searchProtocol({ variables: { query } });
+
+  React.useEffect(() => {
+    if (searchInput.current) {
+      searchInput.current.focus();
+    }
   }, []);
 
   const changeHandler = (e: React.ChangeEvent<HTMLInputElement>): void => {
@@ -138,7 +161,21 @@ export const Search: NextPage = () => {
     setQuery(value);
   };
 
-  console.log(searchData?.searchProtocol);
+  const handleSubmit = async (e: React.FormEvent<SearchFormElement>): Promise<void> => {
+    e.preventDefault();
+    delayDebounce && clearTimeout(delayDebounce);
+    console.log(query);
+    const res = await refetch({ query });
+    console.log(res?.data?.searchProtocol?.[0]);
+
+    if (res?.data?.searchProtocol && res?.data?.searchProtocol.length > 0) {
+      window.location.href = res.data.searchProtocol[0].url;
+      // console.log('dest');
+      // console.log(res?.data.searchProtocol[0].url);
+    }
+  };
+
+  // console.log(searchData?.searchProtocol);
   const protocols = searchData?.searchProtocol;
   return (
     <div>
@@ -147,8 +184,15 @@ export const Search: NextPage = () => {
           <Title>
             <DEFIBAR />
           </Title>
-          <InputContainer>
-            <SearchInput placeholder="Search" onChange={changeHandler} />
+          <InputContainer onSubmit={handleSubmit}>
+            <SearchInput
+              placeholder="Search"
+              name="protocolQuery"
+              onChange={changeHandler}
+              value={query || ''}
+              ref={searchInput}
+            />
+            <input type="submit" hidden />
           </InputContainer>
           <ResultsContainer>
             {protocols &&

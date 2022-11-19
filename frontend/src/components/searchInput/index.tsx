@@ -1,3 +1,4 @@
+import React from 'react';
 import styled from 'styled-components';
 
 const StyledInput = styled.input`
@@ -25,16 +26,33 @@ const StyledInput = styled.input`
   }
 `;
 
-const SearchInput = ({
-  id,
-  placeholder,
-  onChange,
-}: {
+type SearchInputProps = {
   id?: string;
   placeholder?: string;
+  name?: string;
+  value?: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-}) => {
-  return <StyledInput id={id} placeholder={placeholder} onChange={onChange} spellCheck="false" />;
 };
 
-export default SearchInput;
+const SearchInput = (
+  { id, placeholder, value, name, onChange }: SearchInputProps,
+  ref: React.ForwardedRef<HTMLInputElement>,
+) => {
+  return (
+    <StyledInput
+      id={id}
+      type="text"
+      placeholder={placeholder}
+      onChange={onChange}
+      ref={ref}
+      name={name}
+      value={value || ''}
+      spellCheck="false"
+      autoComplete="off"
+    />
+  );
+};
+
+const SearchInputForward = React.forwardRef<HTMLInputElement, SearchInputProps>(SearchInput);
+
+export default SearchInputForward;
