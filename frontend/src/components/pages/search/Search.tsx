@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import Head from 'next/head';
 import type { NextPage } from 'next';
 import { gql } from '@apollo/client';
 // import Image from 'next/image';
@@ -55,7 +56,7 @@ export const Search: NextPage = () => {
     query: SEARCH_PROTOCOL_QUERY,
     fetchPolicy: 'network-only',
   });
-  // console.log(searchData?.searchProtocol);
+
   const protocols = searchData?.searchProtocol;
 
   // ____________ Handlers ____________
@@ -74,21 +75,14 @@ export const Search: NextPage = () => {
       return;
     }
     delayDebounce && clearTimeout(delayDebounce);
-    console.log(query);
     const res = await refetch({ query });
-    console.log(res?.data?.searchProtocol?.[0]);
 
     if (res?.data?.searchProtocol && res?.data?.searchProtocol.length > 0) {
       window.location.href = res.data.searchProtocol[0].url;
-      // console.log('dest');
-      // console.log(res?.data.searchProtocol[0].url);
     }
   };
 
   const keyDownHandler = (e: React.KeyboardEvent<HTMLDivElement>): void => {
-    console.log(e);
-    console.log(protocols);
-
     if (!protocols || protocols.length === 0) {
       return;
     }
@@ -121,7 +115,6 @@ export const Search: NextPage = () => {
     delayDebounce && clearTimeout(delayDebounce);
     const delayDebounceFn = setTimeout(() => {
       refetch({ query });
-      // console.log(res?.data?.searchProtocol);
     }, 400);
     setDelayDebounce(delayDebounceFn);
     return () => {
@@ -133,13 +126,21 @@ export const Search: NextPage = () => {
     if (searchInput.current) {
       searchInput.current.focus();
     }
-    // document.addEventListener('keydown', keyDownHandler);
-    // return () => document.removeEventListener('keydown', keyDownHandler);
   }, []);
 
   return (
-    <div className={RobotoSlab.variable}>
-      <PageContainer tabIndex={0} onKeyDown={keyDownHandler}>
+    <>
+      <Head>
+        <title>DEFIBAR - The DeFi Search Bar</title>
+        <meta name="description" content="Access DeFi apps, Web3 protocols and crypto exchanges quickly." />
+        <meta name="apple-mobile-web-app-title" content="DEFIBAR" />
+        <meta property="og:title" content="DEFIBAR - The DeFi Search Bar" />
+        <meta property="og:description" content="Access DeFi apps, Web3 protocols and crypto exchanges quickly." />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content={process.env.NEXT_PUBLIC_APP_URL} />
+        <meta property="og:site_name" content="DEFIBAR" />
+      </Head>
+      <PageContainer className={RobotoSlab.variable} tabIndex={0} onKeyDown={keyDownHandler}>
         <Container>
           <Title>
             <DEFIBAR />
@@ -171,6 +172,6 @@ export const Search: NextPage = () => {
           </ResultsContainer>
         </Container>
       </PageContainer>
-    </div>
+    </>
   );
 };

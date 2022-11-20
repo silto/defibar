@@ -31,6 +31,9 @@ export default class MyDocument extends Document {
     return (
       <Html lang="en">
         <Head>
+          {/* global meta */}
+          <meta httpEquiv="Content-Type" content="text/html; charset=utf-8" />
+          {/* favicon tags */}
           <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
           <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
           <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
@@ -38,20 +41,10 @@ export default class MyDocument extends Document {
           <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#141410" />
           <meta name="msapplication-TileColor" content="#da532c" />
           <meta name="theme-color" content="#141410" />
-          {/* <link
-            rel="preload"
-            href="/fonts/RobotoSlab-VariableFont_wght.ttf"
-            type="font/ttf"
-            as="font"
-            crossOrigin="anonymous"
-          /> */}
-          {/* <link
-                  rel="preload"
-                  href="/fonts/ProximaNova-Regular.woff"
-                  as="font"
-                  type="font/woff"
-                  crossOrigin=""
-                /> */}
+          <meta name="msapplication-navbutton-color" content="#141410" />
+          <meta name="apple-mobile-web-app-capable" content="yes" />
+          <meta name="apple-mobile-web-app-status-bar-style" content="#141410" />
+          <meta name="twitter:card" content="summary_large_image" />
         </Head>
         <body>
           <Main />

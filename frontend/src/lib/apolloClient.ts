@@ -5,7 +5,7 @@ import { setContext } from '@apollo/client/link/context';
 let apolloClient: ApolloClient<NormalizedCacheObject>;
 
 const httpLink = createHttpLink({
-  uri: 'http://localhost:4500/graphql',
+  uri: `${process.env.NEXT_PUBLIC_API_URL}/graphql`,
 });
 
 const authLink = setContext((_: unknown, { headers }: { headers: { [key: string]: string } }) => {
