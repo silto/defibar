@@ -38,7 +38,7 @@ export class Protocol {
 
 export const ProtocolSchema = SchemaFactory.createForClass(Protocol);
 
-ProtocolSchema.index({ name: "text", symbol: "text" });
+// ProtocolSchema.index({ name: "text", symbol: "text" });
 
 /*
 

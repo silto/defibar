@@ -51,7 +51,7 @@ const ProtocolSchema = new Schema({
 });
 type Protocol = InferSchemaType<typeof ProtocolSchema>;
 type ProtocolModel = Model<Protocol>;
-ProtocolSchema.index({ name: "text", symbol: "text" });
+// ProtocolSchema.index({ name: "text", symbol: "text" });
 mongoose.model("Protocol", ProtocolSchema);
 const Protocol = mongoose.model<Protocol, ProtocolModel>("Protocol");
 

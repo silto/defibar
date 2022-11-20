@@ -1,0 +1,4 @@
+**/node_modules/*
+**/out/*
+**/.next/*
+src/graphql.schema.ts

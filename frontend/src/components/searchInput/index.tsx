@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import { RobotoSlab } from '@/lib/fonts';
 
 const StyledInput = styled.input`
   width: 100%;
@@ -11,7 +12,7 @@ const StyledInput = styled.input`
   border-radius: 0.25rem;
   border: none;
   /* transition: 0.3s ease; */
-  font-family: 'Roboto-Slab';
+  /* font-family: 'Roboto-Slab'; */
   font-weight: 400;
   font-size: 18px;
   line-height: 18px;
@@ -34,6 +35,15 @@ type SearchInputProps = {
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 };
 
+const interceptArrows = (e: React.KeyboardEvent<HTMLDivElement>): void => {
+  switch (e.key) {
+    case 'ArrowUp':
+    case 'ArrowDown':
+      e.preventDefault();
+      break;
+  }
+};
+
 const SearchInput = (
   { id, placeholder, value, name, onChange }: SearchInputProps,
   ref: React.ForwardedRef<HTMLInputElement>,
@@ -44,11 +54,14 @@ const SearchInput = (
       type="text"
       placeholder={placeholder}
       onChange={onChange}
+      onKeyDown={interceptArrows}
       ref={ref}
       name={name}
       value={value || ''}
       spellCheck="false"
       autoComplete="off"
+      tabIndex={1}
+      className={RobotoSlab.className}
     />
   );
 };

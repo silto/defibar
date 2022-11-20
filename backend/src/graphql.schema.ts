@@ -22,7 +22,7 @@ export class Protocol {
 }
 
 export abstract class IQuery {
-    abstract searchProtocol(query?: Nullable<string>): Nullable<Protocol>[] | Promise<Nullable<Protocol>[]>;
+    abstract searchProtocol(query?: Nullable<string>): Protocol[] | Promise<Protocol[]>;
 }
 
 type Nullable<T> = T | null;

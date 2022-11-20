@@ -2,12 +2,12 @@ import { createGlobalStyle } from 'styled-components';
 
 export const GlobalStyles = createGlobalStyle`
 
-  @font-face {
+  /* @font-face {
     font-family: 'Roboto-Slab';
     src: url('/fonts/RobotoSlab-VariableFont_wght.ttf') format('truetype');
     font-weight: 100 900;
     font-display: swap;
-  }
+  } */
 
   *,
   *::before,
@@ -19,7 +19,7 @@ export const GlobalStyles = createGlobalStyle`
     margin: 0;
     padding: 0;
 
-    font-family: 'Roboto-Slab', serif;
+    /* font-family: 'Roboto-Slab', serif; */
     
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;

@@ -20,9 +20,17 @@ export class ProtocolService {
     }
     return await this.protocolModel
       .find({
-        $text: {
-          $search: query,
-        },
+        $or: [
+          {
+            name: new RegExp(`.*${query}.*`, "i"),
+          },
+          {
+            symbol: new RegExp(`^${query}$`, "i"),
+          },
+        ],
+      })
+      .sort({
+        tvl: "desc",
       })
       .limit(searchLimit);
   };

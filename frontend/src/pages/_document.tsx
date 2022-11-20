@@ -38,7 +38,13 @@ export default class MyDocument extends Document {
           <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#141410" />
           <meta name="msapplication-TileColor" content="#da532c" />
           <meta name="theme-color" content="#141410" />
-          <link rel="preload" href="/fonts/RobotoSlab-VariableFont_wght.ttf" as="font" crossOrigin="anonymous" />
+          {/* <link
+            rel="preload"
+            href="/fonts/RobotoSlab-VariableFont_wght.ttf"
+            type="font/ttf"
+            as="font"
+            crossOrigin="anonymous"
+          /> */}
           {/* <link
                   rel="preload"
                   href="/fonts/ProximaNova-Regular.woff"
