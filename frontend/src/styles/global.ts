@@ -34,6 +34,7 @@ const theme = {
   background: '#141410',
   textDefault: '#ececec',
   gold: '#d4af37',
+  error: '#dc3836',
 };
 
 export default theme;

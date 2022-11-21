@@ -21,6 +21,7 @@ import {
   ProtocolLogo,
   ProtocolName,
   InfoContainer,
+  ErrorContainer,
 } from './Search.style';
 
 const SEARCH_PROTOCOL_QUERY = gql`
@@ -51,7 +52,7 @@ export const Search: NextPage = () => {
   const [selectedProtocol, setSelectedProtocol] = useState<number | null>(null);
   const {
     // loading: searchLoading,
-    // error: searchError,
+    error: searchError,
     variables: searchVariables,
     data: searchData,
     refetch,
@@ -164,6 +165,7 @@ export const Search: NextPage = () => {
             />
             <input type="submit" hidden />
           </InputContainer>
+          {searchError && <ErrorContainer>{'There was an error getting the protocols'}</ErrorContainer>}
           <ResultsContainer>
             {protocols &&
               protocols.map((protocol, index) => (

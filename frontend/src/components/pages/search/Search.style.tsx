@@ -68,6 +68,16 @@ export const ResultsContainer = styled.div`
   border-radius: 0 0 20px 20px;
 `;
 
+export const ErrorContainer = styled.div`
+  margin-top: 30px;
+  width: 100%;
+  max-width: 800px;
+  color: ${({ theme }) => theme.error};
+  font-size: 16px;
+  font-weight: 500;
+  text-align: center;
+`;
+
 export const ProtocolBlock = styled.a<{ selected: boolean }>`
   display: flex;
   flex-direction: row;
