@@ -4,6 +4,7 @@ import type { NextPage } from 'next';
 import { gql } from '@apollo/client';
 // import Image from 'next/image';
 import SearchInput from '@/components/searchInput';
+import Info from '@/components/info';
 import DEFIBAR from '@/public/DEFIBAR_title.svg';
 // import borderImage from '@/public/border-image.svg';
 import { useSearchProtocolQuery } from '@/types/schema';
@@ -19,6 +20,7 @@ import {
   ProtocolBlock,
   ProtocolLogo,
   ProtocolName,
+  InfoContainer,
 } from './Search.style';
 
 const SEARCH_PROTOCOL_QUERY = gql`
@@ -171,6 +173,9 @@ export const Search: NextPage = () => {
               ))}
           </ResultsContainer>
         </Container>
+        <InfoContainer>
+          <Info />
+        </InfoContainer>
       </PageContainer>
     </>
   );

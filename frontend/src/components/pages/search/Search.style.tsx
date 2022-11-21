@@ -65,6 +65,7 @@ export const ResultsContainer = styled.div`
   align-items: flex-start;
   gap: 10px 20px;
   overflow: scroll;
+  border-radius: 0 0 20px 20px;
 `;
 
 export const ProtocolBlock = styled.a<{ selected: boolean }>`
@@ -98,4 +99,11 @@ export const ProtocolName = styled.div`
   color: ${({ theme }) => theme.textDefault};
   font-size: 16px;
   font-weight: 400;
+`;
+
+export const InfoContainer = styled.div`
+  display: block;
+  position: absolute;
+  bottom: 6px;
+  right: 5px;
 `;
