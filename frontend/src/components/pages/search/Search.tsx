@@ -52,6 +52,7 @@ export const Search: NextPage = () => {
   const {
     // loading: searchLoading,
     // error: searchError,
+    variables: searchVariables,
     data: searchData,
     refetch,
   } = useSearchProtocolQuery({
@@ -77,10 +78,16 @@ export const Search: NextPage = () => {
       return;
     }
     delayDebounce && clearTimeout(delayDebounce);
-    const res = await refetch({ query });
-
-    if (res?.data?.searchProtocol && res?.data?.searchProtocol.length > 0) {
-      window.location.href = res.data.searchProtocol[0].url;
+    const prevQuery = searchVariables?.query;
+    let data;
+    if (prevQuery === query && searchData?.searchProtocol) {
+      data = searchData;
+    } else {
+      const res = await refetch({ query });
+      data = res?.data;
+    }
+    if (data?.searchProtocol && data?.searchProtocol.length > 0) {
+      window.location.href = data.searchProtocol[0].url;
     }
   };
 

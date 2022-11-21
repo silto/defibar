@@ -34,6 +34,9 @@ export class Protocol {
 
   @Prop()
   tvl?: number;
+
+  @Prop()
+  updateId?: string;
 }
 
 export const ProtocolSchema = SchemaFactory.createForClass(Protocol);

@@ -1,6 +1,7 @@
 import { join } from "path";
 // import { DateResolver, DateTimeResolver, GraphQLJSONObject } from "graphql-scalars";
 import { Module } from "@nestjs/common";
+import { LoggerModule } from "nestjs-pino";
 import { GraphQLModule } from "@nestjs/graphql";
 import { ApolloDriver, ApolloDriverConfig } from "@nestjs/apollo";
 import { MongooseModule } from "@nestjs/mongoose";
@@ -9,6 +10,7 @@ import { ProtocolModule } from "@/modules/protocol/protocol.module";
 
 @Module({
   imports: [
+    LoggerModule.forRoot(),
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
       typePaths: ["./**/*.graphql"],

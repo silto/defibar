@@ -1,4 +1,4 @@
-import { Args, Query, Resolver, ResolveField, Parent } from "@nestjs/graphql";
+import { Args, Query, Resolver } from "@nestjs/graphql";
 import { ProtocolService } from "@/modules/protocol/protocol.service";
 import { Protocol as ProtocolSchema } from "./schemas/protocol.schema";
 import { Protocol } from "@/graphql.schema";
