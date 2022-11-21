@@ -11,6 +11,6 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule, { bufferLogs: true });
   app.useLogger(app.get(Logger));
   app.useGlobalInterceptors(new LoggerErrorInterceptor());
-  await app.listen(process.env.SERVER_PORT ?? 4500);
+  await app.listen(process.env.PORT ?? 4500);
 }
 bootstrap();

@@ -2,6 +2,10 @@
   "name": "nextjs-typescript-apollo-boilerplate",
   "version": "0.1.1",
   "private": true,
+  "engines": {
+    "node": "16.x",
+    "npm": "8.x"
+  },
   "scripts": {
     "dev": "concurrently \"graphql-codegen --watch --config ./.graphqlrc.yml\" \"next dev -p 4600 ./src\"",
     "build": "next build ./src",
