@@ -56,6 +56,8 @@ export const Search: NextPage = () => {
     error: searchError,
     variables: searchVariables,
     data: searchData,
+    loading,
+    networkStatus,
     refetch,
   } = useSearchProtocolQuery({
     query: SEARCH_PROTOCOL_QUERY,
@@ -63,7 +65,23 @@ export const Search: NextPage = () => {
     variables: {
       query,
     },
+    ssr: false,
+    onCompleted: (data) => {
+      console.log('onCompleted');
+      console.log(data);
+    },
   });
+  console.log('query logs_________________');
+  console.log('searchData');
+  console.log(searchData);
+  console.log('searchVariables');
+  console.log(searchVariables);
+  console.log('searchError');
+  console.log(searchError);
+  console.log('loading');
+  console.log(loading);
+  console.log('networkStatus');
+  console.log(networkStatus);
 
   const protocols = searchData?.searchProtocol;
 
