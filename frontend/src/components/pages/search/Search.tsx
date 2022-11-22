@@ -48,6 +48,7 @@ interface SearchFormElement extends HTMLFormElement {
 export const Search: NextPage = () => {
   const searchInput = React.useRef<HTMLInputElement>(null);
   const [query, setQuery] = useState<string>('');
+  const [initialFocus, setInitialFocus] = useState<boolean>(false);
   const [delayDebounce, setDelayDebounce] = useState<ReturnType<typeof setTimeout> | null>(null);
   const [selectedProtocol, setSelectedProtocol] = useState<number | null>(null);
   const {
@@ -59,6 +60,9 @@ export const Search: NextPage = () => {
   } = useSearchProtocolQuery({
     query: SEARCH_PROTOCOL_QUERY,
     fetchPolicy: 'network-only',
+    variables: {
+      query,
+    },
   });
 
   const protocols = searchData?.searchProtocol;
@@ -133,10 +137,11 @@ export const Search: NextPage = () => {
   }, [query]);
 
   useEffect(() => {
-    if (searchInput.current) {
+    if (searchInput.current && !initialFocus) {
       searchInput.current.focus();
+      setInitialFocus(true);
     }
-  }, []);
+  }, [searchInput?.current, initialFocus]);
 
   return (
     <>
