@@ -16,6 +16,7 @@ export const PageContainer = styled.div`
   border-image-outset: 0;
   border-image-repeat: repeat;
   outline: none;
+  position: relative;
 `;
 
 export const Container = styled.div`

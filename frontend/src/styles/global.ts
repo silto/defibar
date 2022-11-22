@@ -24,6 +24,7 @@ export const GlobalStyles = createGlobalStyle`
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    padding-bottom: env(safe-area-inset-bottom);
   }
   svg {
     pointer-events: none;
