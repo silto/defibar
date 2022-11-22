@@ -157,7 +157,7 @@ export const Search: NextPage = () => {
         <meta property="og:type" content="website" />
         <meta property="og:url" content={process.env.NEXT_PUBLIC_APP_URL} />
         <meta property="og:site_name" content="DEFIBAR" />
-        <meta property="og:image" content={`${process.env.NEXT_PUBLIC_APP_URL}/twitter_image.png`} />
+        <meta property="og:image" content={`${process.env.NEXT_PUBLIC_APP_URL}/social_image.png`} />
         <meta name="twitter:title" content="DEFIBAR - The DeFi Search Bar" />
         <meta name="twitter:description" content="Access DeFi apps, Web3 protocols and crypto exchanges quickly." />
         <meta name="twitter:image" content={`${process.env.NEXT_PUBLIC_APP_URL}/twitter_image.png`} />
