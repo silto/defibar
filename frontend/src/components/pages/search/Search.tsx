@@ -66,22 +66,7 @@ export const Search: NextPage = () => {
       query,
     },
     ssr: false,
-    onCompleted: (data) => {
-      console.log('onCompleted');
-      console.log(data);
-    },
   });
-  console.log('query logs_________________');
-  console.log('searchData');
-  console.log(searchData);
-  console.log('searchVariables');
-  console.log(searchVariables);
-  console.log('searchError');
-  console.log(searchError);
-  console.log('loading');
-  console.log(loading);
-  console.log('networkStatus');
-  console.log(networkStatus);
 
   const protocols = searchData?.searchProtocol;
 
@@ -172,6 +157,8 @@ export const Search: NextPage = () => {
         <meta property="og:type" content="website" />
         <meta property="og:url" content={process.env.NEXT_PUBLIC_APP_URL} />
         <meta property="og:site_name" content="DEFIBAR" />
+        <meta property="og:image" content={`${process.env.NEXT_PUBLIC_APP_URL}/twitter_image.png`} />
+        <meta name="twitter:image" content={`${process.env.NEXT_PUBLIC_APP_URL}/twitter_image.png`} />
       </Head>
       <PageContainer className={RobotoSlab.variable} tabIndex={0} onKeyDown={keyDownHandler}>
         <Container>

@@ -42,6 +42,7 @@ export default class MyDocument extends Document {
           <meta name="msapplication-navbutton-color" content="#141410" />
           <meta name="apple-mobile-web-app-capable" content="yes" />
           <meta name="apple-mobile-web-app-status-bar-style" content="#141410" />
+          <meta name="twitter:creator" content="@_silto_" />
           <meta name="twitter:card" content="summary_large_image" />
         </Head>
         <body>
