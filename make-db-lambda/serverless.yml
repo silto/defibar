@@ -1,0 +1,28 @@
+org: silto
+app: make-db-lambda
+service: make-db-lambda
+
+frameworkVersion: "3"
+useDotenv: true
+
+provider:
+  name: aws
+  runtime: nodejs16.x
+  stage: production
+  region: us-east-1
+
+functions:
+  cronHandler:
+    handler: makeDb.run
+    memorySize: 512
+    timeout: 60
+    events:
+      # Invoke Lambda function every day at 5AM UTC
+      - schedule: cron(0 5 * * ? *)
+    environment:
+      DEFIBAR_DATABASE_URL: ${env:DEFIBAR_DATABASE_URL, null}
+      DB_URL_OBJ: ${ssm(raw):/aws/reference/secretsmanager/defibar-database-url, null}
+
+plugins:
+  - serverless-offline
+  - serverless-offline-scheduler
