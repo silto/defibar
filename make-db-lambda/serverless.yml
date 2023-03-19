@@ -5,11 +5,16 @@ service: make-db-lambda
 frameworkVersion: "3"
 useDotenv: true
 
+params:
+  local:
+    enabled: true
+
 provider:
   name: aws
   runtime: nodejs16.x
   stage: production
   region: us-east-1
+  deploymentMethod: direct
 
 functions:
   cronHandler:
@@ -18,7 +23,12 @@ functions:
     timeout: 60
     events:
       # Invoke Lambda function every day at 5AM UTC
-      - schedule: cron(0 5 * * ? *)
+
+      - schedule:
+          # Use this cron to test locally (invokes every 5 min):
+          # rate: cron(0/5 * * * ? *)
+          rate: cron(0 5 * * ? *)
+          enabled: ${param:enabled, false}
     environment:
       DEFIBAR_DATABASE_URL: ${env:DEFIBAR_DATABASE_URL, null}
       DB_URL_OBJ: ${ssm(raw):/aws/reference/secretsmanager/defibar-database-url, null}

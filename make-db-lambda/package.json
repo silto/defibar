@@ -6,7 +6,7 @@
   "license": "MIT",
   "scripts": {
     "start": "serverless offline --noTimeout start --stage local",
-    "deploy": "serverless deploy"
+    "deploy": "serverless deploy --verbose"
   },
   "devDependencies": {
     "serverless-offline": "^11.5.0",
