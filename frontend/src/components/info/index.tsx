@@ -106,7 +106,7 @@ const Info = () => {
                 }
               </p>
               <h3>{'Credits :'}</h3>
-              {/* <p>
+              <p>
                 {'The list of apps and their URLs is fetched regularly from '}
                 <a href="https://defillama.com/" rel="noreferrer" target="_blank">
                   {'DefiLlama'}
@@ -120,17 +120,6 @@ const Info = () => {
                   {'this address'}
                 </a>
                 {'.'}
-              </p> */}
-              {/* Temporary (I hope) notice about protocol updates suspension */}
-              <p>
-                {
-                  "The list of apps and their URLs was fetched from DefiLlama's API (last updated March 19th 2023 at 5AM UTC)."
-                }
-              </p>
-              <p>
-                {
-                  "The protocol list updates are currently disabled due to the uncertainty concerning DefiLlama's internal power struggles."
-                }
               </p>
               <p className="noMargin">
                 {'© 2023 DEFIBAR by '}
