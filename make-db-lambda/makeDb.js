@@ -103,6 +103,7 @@ module.exports.run = async (event, context) => {
           modified += 1;
         }
       } else if (res.upsertedCount) {
+        console.log("added", rawProtocol.id, rawProtocol.name);
         added += 1;
       } else {
         console.log("no match no upsert?");
