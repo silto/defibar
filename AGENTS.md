@@ -1,11 +1,13 @@
 # DEFIBAR agent notes
 
 - Start with `README.md`, `PLAN.md`, and the relevant file in `tickets/`. Update ticket status as work proceeds. After completing a ticket, append `## Implementation notes` with changed files, verification, deployment identifiers, and gotchas.
+- Once ticket 009 and the migration are fully complete, remove `PLAN.md` and `tickets/` from the repository. Keep the lasting operating instructions in `README.md` and this file.
 - Keep `README.md` and this file current so another agent can resume. Put decisions and sequence in `PLAN.md`; keep this file short.
 - The migration target is Cloudflare Pages for the static frontend and Railway for API, private MongoDB, and the daily updater. Skip upgrading Serverless Framework; retire the AWS Lambda after the Railway cron is proven.
 - Atlas `test.protocols` is the confirmed production source. Restore it as Railway `defibar.protocols`. Preserve data and document IDs. A short migration outage is acceptable.
 - Railway region is US East. The user declined Railway Pro and managed backups: keep Atlas intact during cutover, use a private BSON dump for transfer/rollback, and document manual restore. The protocol dataset can be rebuilt by the updater.
 - Prefer simple changes and focused safety checks. Do not add infrastructure or tests without a concrete failure mode. Never put database credentials in source, tickets, logs, or shell history.
+- This repository is public. Keep secrets in service configuration, never in source or `NEXT_PUBLIC_*` values. Commit only placeholder `.env.example` files; local `.env*` files and key files are ignored. Recheck the public tree before the final merge.
 - Ask the user to perform settings that require a browser. Use connected tools or CLIs for settings they support. Commit after each completed ticket, as requested.
 - There is no root npm workspace. Run `npm ci` and package scripts from `frontend/` or `backend/`; see their READMEs. `make-db-lambda/` is a separate legacy package until retirement.
 - Run `node scripts/smoke.mjs` for a read-only production frontend/API check; pass `FRONTEND_URL` and `API_URL` for previews. Backend tests use Node's test runner. Supply `TEST_DATABASE_URL` for isolated integration/updater tests; the local `.env` can point at production Atlas.

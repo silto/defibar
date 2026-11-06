@@ -58,3 +58,5 @@ The repository has no current dependency audit or release checks. The frontend b
 ## Ticket maintenance
 
 Each ticket states prerequisites, work, and acceptance criteria. Mark status as work proceeds. After implementation, append an `Implementation notes` block with changed files, checks and results, deployment identifiers, and any new gotchas. Update this plan, `README.md`, and `AGENTS.md` when architecture, instructions, or operating steps change.
+
+After ticket 009 closes, move lasting instructions into `README.md` and `AGENTS.md`, then remove this plan and `tickets/` from the final repository.

@@ -1,5 +1,14 @@
 # assets
 assets
 
+# Local configuration and credentials.
+**/.env
+**/.env.*
+!**/.env.example
+**/*.pem
+**/*.key
+**/*.p12
+**/*.pfx
+
 # Private migration archives; never commit production database snapshots.
 .migration-backups/
