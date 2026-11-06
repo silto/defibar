@@ -68,7 +68,7 @@ npm run lint
 ```
 
 The integration test accepts only local `127.0.0.1/defibar`, adds two temporary
-documents, and removes them afterward. It does not use the production Atlas URL.
+documents, and removes them afterward. It does not use the production Railway URL.
 The updater test also uses only that local database, in its own temporary collection.
 
 Regenerate types from the GraphQL declarations when the SDL changes:
