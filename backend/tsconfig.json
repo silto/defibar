@@ -3,6 +3,7 @@
     "lib": ["es2021"],
     "module": "commonjs",
     "target": "es2021",
+    "strictPropertyInitialization": false,
     "declaration": true,
     "removeComments": true,
     "emitDecoratorMetadata": true,
@@ -10,11 +11,11 @@
     "allowSyntheticDefaultImports": true,
     "sourceMap": true,
     "outDir": "./dist",
-    "baseUrl": ".",
     "incremental": true,
     "skipLibCheck": true,
+    "types": ["node"],
     "paths": {
-      "@/*": ["src/*"],
+      "@/*": ["./src/*"]
     }
   }
 }

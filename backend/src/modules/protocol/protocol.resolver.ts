@@ -1,7 +1,7 @@
 import { Args, Query, Resolver } from "@nestjs/graphql";
-import { ProtocolService } from "@/modules/protocol/protocol.service";
+import { ProtocolService } from "./protocol.service";
 import { Protocol as ProtocolSchema } from "./schemas/protocol.schema";
-import { Protocol } from "@/graphql.schema";
+import { Protocol } from "../../graphql.schema";
 
 @Resolver(() => Protocol)
 export class ProtocolResolver {

@@ -48,7 +48,7 @@ function config(options: DotenvOptions = {}): {
   if (missing.length > 0) {
     throw new MissingEnvVarsError(
       allowEmptyValues,
-      options.path ?? ".env",
+      typeof options.path === "string" ? options.path : ".env",
       example,
       missing,
       dotenvResult.error,
