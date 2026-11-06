@@ -1,6 +1,6 @@
 # DEFIBAR migration plan
 
-Updated 2026-11-06. Tickets 001–005 are complete; Pages setup in 006 is next. Heroku, Atlas, AWS, and production DNS still serve the live site. Track implementation in [`tickets/`](tickets/).
+Updated 2026-11-06. Tickets 001–006 are complete; the final Atlas transfer in 007 is next. Heroku, Atlas, AWS, and production DNS still serve the live site. Track implementation in [`tickets/`](tickets/).
 
 ## Decisions
 
@@ -23,7 +23,7 @@ Updated 2026-11-06. Tickets 001–005 are complete; Pages setup in 006 is next. 
 | AWS | The `defibar` AWS CLI profile works when network access is permitted. Lambda `make-db-lambda-production-cronHandler` is active on Node 16, last deployed 2023-04-04. Its EventBridge rule is **enabled** at 05:00 UTC and targets the function. CloudWatch showed one invocation each day in the checked 30-day period, zero Lambda errors, and a successful 2026-11-05 run: 8,927 matched, 16 added, 0 deleted. Serverless dashboard visibility does not reflect the underlying AWS runs. |
 | Atlas | Project `Production`, cluster `defibar`, MongoDB 8.0.37 in US East. `test.protocols` contained 8,943 documents, about 4.2 MB of data, and only the `_id` index when inspected. No missing or duplicate `defiLlamaId` values were found. |
 | Heroku | `defibar-front` (`7ee2c278-ea68-46ac-9b22-9a96fc8af909`) serves `defibar.finance`; `defibar-backend` (`904405d0-7c51-4a58-9976-ad552da48cb6`) serves `api.defibar.finance`. Each runs one Basic web dyno on `heroku-22` in the US region. Both use a subdirectory buildpack followed by `heroku/nodejs`. Ticket 001 records their config variable names and rollback DNS targets. |
-| Destinations | Cloudflare already hosts the active `defibar.finance` DNS zone; apex and `api` point to Heroku. No DEFIBAR Pages project exists. Railway has no DEFIBAR project. |
+| Destinations | The Railway project and the Git-connected Cloudflare Pages project are staged and healthy. Production apex and `api` still point to Heroku. |
 
 The repository has no current dependency audit or release checks. The frontend build uses `next ... ./src`, with static assets under `src/public`; normalize the project root before configuring Pages. The API search uses an unescaped regular expression from user input. The existing Lambda catches errors without failing the invocation, so its zero-error metric alone does not prove every run succeeded.
 
@@ -53,7 +53,7 @@ The repository has no current dependency audit or release checks. The frontend b
 - Package upgrades and dependency audits are recorded in tickets 002 and 004. Recheck before any later version bump.
 - Railway MongoDB 8.0 is provisioned privately in US East with a 1 GB volume; an authenticated SSH tunnel and API search passed. Complete the final manual BSON transfer in ticket 007. The user declined the Pro upgrade required for managed backups.
 - Obtain a usable Atlas dump connection and check source network access. Do not put credentials in tickets, logs, or shell history.
-- Verify Pages static export constraints and build settings against the upgraded Next version. The browser needs a public API URL at build time. [Cloudflare Pages guide](https://developers.cloudflare.com/pages/framework-guides/nextjs/deploy-a-static-nextjs-site/); [Next static export guide](https://nextjs.org/docs/pages/guides/static-exports).
+- Pages static export and browser search passed at `https://defibar.pages.dev/` against the Railway API. The build uses a temporary Railway API URL; switch to `https://api.defibar.finance` and rebuild at cutover. [Cloudflare Pages guide](https://developers.cloudflare.com/pages/framework-guides/nextjs/deploy-a-static-nextjs-site/); [Next static export guide](https://nextjs.org/docs/pages/guides/static-exports).
 
 ## Ticket maintenance
 

@@ -40,7 +40,7 @@ if (!page.headers.get('content-type')?.includes('text/html')) {
   throw new Error('Frontend did not serve HTML');
 }
 const html = await page.text();
-if (!html.includes('<title>DEFIBAR - The DeFi Search Bar</title>')) {
+if (!/<title(?:\s[^>]*)?>DEFIBAR - The DeFi Search Bar<\/title>/.test(html)) {
   throw new Error('Frontend title is missing');
 }
 
