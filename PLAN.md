@@ -1,6 +1,6 @@
 # DEFIBAR migration plan
 
-Updated 2026-11-06. Ticket 001 baseline is complete; no production resources have changed. Track implementation in [`tickets/`](tickets/).
+Updated 2026-11-06. Tickets 001–005 are complete; Pages setup in 006 is next. Heroku, Atlas, AWS, and production DNS still serve the live site. Track implementation in [`tickets/`](tickets/).
 
 ## Decisions
 
@@ -33,9 +33,9 @@ The repository has no current dependency audit or release checks. The frontend b
 2. **Upgrade backend** — [002](tickets/002-backend-upgrade.md). Move to Node 24 and compatible NestJS, Apollo, Mongoose, TypeScript, and tooling. Keep `/graphql` behavior; fix query handling and add a useful health check.
 3. **Consolidate updater** — [003](tickets/003-railway-updater.md). Make the backend script a safe, finite CLI command. Reject failed/empty/incomplete upstream data before writes or cleanup; use bounded work and proper exit status; close MongoDB. Preserve existing data fields and daily behavior.
 4. **Upgrade frontend and export** — [004](tickets/004-frontend-pages-build.md). Upgrade Next.js and peers, normalize the root, remove middleware, and produce a tested `out/` static export.
-5. **Provision Railway** — [005](tickets/005-railway-services.md). Create a dedicated project with private MongoDB, API, and cron service. Configure volume, backup, variables, health check, logs, and schedule. Test cron in an isolated environment; do not arm its production schedule until final cutover. Use a test snapshot for pre-cutover checks.
+5. **Provision Railway** — [005](tickets/005-railway-services.md). Create a dedicated project with private MongoDB, API, and cron service. Configure volume, variables, health check, logs, and schedule. Test cron before final data transfer; do not arm its production schedule until final cutover. Railway managed backups require a Pro upgrade that the user declined.
 6. **Prepare Pages** — [006](tickets/006-cloudflare-pages.md). Connect the monorepo `frontend/` to Pages, set build variables, and verify a preview against Railway. Allow the exact preview origin temporarily in API CORS.
-7. **Final database transfer** — [007](tickets/007-atlas-data-transfer.md). Freeze the AWS updater, back up Atlas, dump `test.protocols`, restore to Railway `defibar.protocols`, and compare data and queries.
+7. **Final database transfer** — [007](tickets/007-atlas-data-transfer.md). Freeze the AWS updater, retain a private Atlas BSON dump, restore `test.protocols` to Railway `defibar.protocols`, and compare data and queries.
 8. **Cut over** — [008](tickets/008-cutover-and-rollback.md). Point `api.defibar.finance` to Railway, then attach/switch `defibar.finance` to Pages. Validate search before enabling Railway cron. Watch a manual run and one scheduled run; keep Heroku and Atlas ready for rollback.
 9. **Retire old hosting** — [009](tickets/009-retire-and-document.md). Disable/remove AWS Lambda and its schedule, remove Heroku and Atlas only after acceptance, rotate obsolete credentials, and update README, AGENTS, and runbooks.
 
@@ -45,13 +45,13 @@ The repository has no current dependency audit or release checks. The frontend b
 - Use MongoDB Database Tools to transfer BSON plus metadata. Map `test.*` to `defibar.*` on restore, and set Railway API/cron connection strings to `/defibar`. Confirm version compatibility and use a private Railway connection for services. Atlas MCP can inspect data but cannot produce the BSON dump; obtain an authorized Atlas dump connection at execution time. [MongoDB dump/restore guidance](https://www.mongodb.com/docs/database-tools/mongorestore/mongorestore-examples/).
 - Compare frozen source and target counts, indexes, representative documents, and GraphQL search results. The 8,943 count is a 2026-11-06 baseline, not the final acceptance count.
 - Change the API DNS first: the old frontend can continue using `api.defibar.finance`. Switch the apex to Pages second. Preserve mail MX/TXT and unrelated DNS records.
-- Before Railway cron writes, rollback means restoring both DNS records to Heroku and re-enabling the AWS rule against unchanged Atlas. After a Railway write, take a Railway backup and explicitly reconcile data before any rollback to Atlas.
+- Before Railway cron writes, rollback means restoring both DNS records to Heroku and re-enabling the AWS rule against unchanged Atlas. After a Railway write, take a fresh private BSON dump and explicitly reconcile data before any rollback to Atlas. Railway managed backups will remain disabled by user choice; the protocol dataset can also be rebuilt by the updater.
 - Do not delete Atlas, Heroku, or AWS resources until production checks and one scheduled Railway run pass.
 
 ## Checks still needed during implementation
 
-- Confirm the exact package versions and audit findings against current registries, then select compatible upgrade groups. Apollo Server 3 is end of life; [Apollo's migration guide](https://www.apollographql.com/docs/apollo-server/migration-from-v3) and [Nest's migration guide](https://docs.nestjs.com/migration-guide) apply.
-- Verify Railway MongoDB version, backup schedule, restore path, and limits before importing. A single-node database meets the stated availability needs; confirm the cost before creation.
+- Package upgrades and dependency audits are recorded in tickets 002 and 004. Recheck before any later version bump.
+- Railway MongoDB 8.0 is provisioned privately in US East with a 1 GB volume; an authenticated SSH tunnel and API search passed. Complete the final manual BSON transfer in ticket 007. The user declined the Pro upgrade required for managed backups.
 - Obtain a usable Atlas dump connection and check source network access. Do not put credentials in tickets, logs, or shell history.
 - Verify Pages static export constraints and build settings against the upgraded Next version. The browser needs a public API URL at build time. [Cloudflare Pages guide](https://developers.cloudflare.com/pages/framework-guides/nextjs/deploy-a-static-nextjs-site/); [Next static export guide](https://nextjs.org/docs/pages/guides/static-exports).
 

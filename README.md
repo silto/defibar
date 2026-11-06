@@ -4,6 +4,8 @@ This is the repository for [DEFIBAR](https://defibar.finance): a Next.js fronten
 
 The app currently runs on Heroku, Atlas, and AWS Lambda. The approved migration moves the frontend to Cloudflare Pages and the API, MongoDB, and daily updater to Railway. See [PLAN.md](PLAN.md) for the sequence and [tickets/](tickets/) for work and acceptance criteria. Agents should read [AGENTS.md](AGENTS.md) before making changes.
 
+Migration progress (2026-11-06): the Railway API at `https://api-production-0fffd.up.railway.app` and private MongoDB are provisioned with disposable test data. The Railway updater passed a manual run but has no schedule. Production DNS still points to Heroku; Atlas and AWS Lambda remain active until the final transfer.
+
 Local setup and test instructions are in `frontend/README.md`, `backend/README.md`, and `make-db-lambda/README.md`. The Lambda package remains until the Railway updater is proven and AWS is retired.
 
 Run `node scripts/smoke.mjs` for a read-only production frontend/API check. Set `FRONTEND_URL` and `API_URL` to check preview deployments instead.

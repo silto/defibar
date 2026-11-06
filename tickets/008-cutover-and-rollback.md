@@ -13,7 +13,7 @@ Status: Not started
 - Change `api.defibar.finance` to Railway and verify old Heroku frontend still searches via that hostname.
 - Attach/switch `defibar.finance` to Pages. Verify certificate, static assets, search, navigation, errors, and desktop/mobile behavior. Preserve MX/TXT records.
 - Run Railway updater once manually against private MongoDB. Verify completion, row counts, and no duplicate data. Enable or confirm its 05:00 UTC schedule, then observe one scheduled run and API health afterward.
-- If checks fail before Railway updater writes, reverse DNS and re-enable the AWS rule. After a Railway write, take a fresh backup and reconcile changes before returning to Atlas.
+- If checks fail before Railway updater writes, reverse DNS and re-enable the AWS rule. After a Railway write, take a fresh private BSON dump and reconcile changes before returning to Atlas.
 
 ## Acceptance criteria
 
