@@ -13,5 +13,8 @@ assets
 # Private migration archives; never commit production database snapshots.
 .migration-backups/
 
+# Railway CLI links contain project and environment identifiers.
+.railway/
+
 # Local leftovers from the retired Lambda package may include credentials.
 make-db-lambda/

@@ -1,7 +1,7 @@
 # DEFIBAR agent notes
 
 - Keep this file and `README.md` current so a future agent can resume. Commit focused changes with their verification results.
-- Use focused safety checks and simple changes. The repository is public: keep database credentials in service variables, never in source, `NEXT_PUBLIC_*` values, logs, or shell history. Commit only placeholder `.env.example` files. Local `.env*` and private-key files are ignored. Recheck the public tree before a final merge.
+- Use focused safety checks and simple changes. The repository is public: keep database credentials in service variables, never in source, `NEXT_PUBLIC_*` values, logs, or shell history. Keep provider project, environment, service, and deployment IDs out of tracked files. Commit only placeholder `.env.example` files. Local `.env*`, Railway link metadata, and private-key files are ignored. Recheck the public tree before a final merge.
 - Ask the user to make settings that require a browser. Use connected tools or CLIs for supported settings. Commit after each completed ticket, as requested.
 - Cloudflare Pages hosts the static Next.js frontend at `defibar.finance`. Railway US East hosts the GraphQL API at `api.defibar.finance`, private MongoDB `defibar`, and the daily updater. There is no root npm workspace. Use Node 24.21.0 and npm 11. Run package commands from `frontend/` or `backend/`; see their READMEs.
 - Pages builds `frontend/` with `npm run build` and publishes `out/`. GraphQL Codegen reads `../backend/src/**/*.graphql`, so it needs the full checkout. `NEXT_PUBLIC_API_URL` and `NEXT_PUBLIC_APP_URL` are build-time public values. The API CORS policy allows the production origin and this project's `pages.dev` branch/deployment origins.

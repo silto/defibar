@@ -40,10 +40,11 @@ In Railway, open `defibar` → `protocol-updater` → Deployments. Check the lat
 
 ## Back up or restore MongoDB manually
 
-Railway MongoDB has a 1 GB persistent volume, no public TCP proxy, and no managed backups on the current plan. The protocol collection can be rebuilt by the updater, but a private BSON archive preserves an exact point in time. Install MongoDB Database Tools, `mongosh`, and an authenticated Railway CLI. Use a secure terminal; `railway connect --tunnel-only` prints a database password unless output is suppressed. From the repository root, open a tunnel in one terminal and keep it running:
+Railway MongoDB has a 1 GB persistent volume, no public TCP proxy, and no managed backups on the current plan. The protocol collection can be rebuilt by the updater, but a private BSON archive preserves an exact point in time. Install MongoDB Database Tools, `mongosh`, and an authenticated Railway CLI. Link this checkout to the `defibar` project and production environment once; the resulting `.railway/` metadata is Git-ignored. Use a secure terminal; `railway connect --tunnel-only` prints a database password unless output is suppressed. From the repository root, open a tunnel in one terminal and keep it running:
 
 ```sh
-railway connect MongoDB --project 6268995e-b6aa-41f2-b3cf-833f64b98586 --environment production --tunnel-only --port 27018 >/dev/null 2>&1
+railway link --project defibar --environment production
+railway connect MongoDB --tunnel-only --port 27018 >/dev/null 2>&1
 ```
 
 In a second terminal, replace `DB_USER` with the MongoDB username shown in Railway variables. With `--username` and no `--password` option, MongoDB Database Tools prompt for the password. Never print the password or put it in a URI, file, or commit. Save archives only in the Git-ignored `.migration-backups/` directory, with restrictive permissions:
