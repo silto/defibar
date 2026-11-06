@@ -2,9 +2,9 @@
 
 This is the repository for [DEFIBAR](https://defibar.finance): a Next.js frontend, NestJS GraphQL API, and protocol database updater.
 
-The app currently runs on Heroku, Atlas, and AWS Lambda. The approved migration moves the frontend to Cloudflare Pages and the API, MongoDB, and daily updater to Railway. See [PLAN.md](PLAN.md) for the sequence and [tickets/](tickets/) for work and acceptance criteria. Agents should read [AGENTS.md](AGENTS.md) before making changes.
+The app runs on Cloudflare Pages (frontend) and Railway (GraphQL API, private MongoDB, and protocol updater). See [PLAN.md](PLAN.md) for the migration sequence and [tickets/](tickets/) for work and acceptance criteria. Agents should read [AGENTS.md](AGENTS.md) before making changes.
 
-Migration progress (2026-11-06): the Railway API at `https://api-production-0fffd.up.railway.app` and Cloudflare Pages preview at `https://defibar.pages.dev/` are healthy. Atlas `test.protocols` was transferred and verified as Railway `defibar.protocols`; a private BSON archive is retained locally. The AWS updater schedule is disabled, and the Railway updater has no schedule yet. Production DNS still points to Heroku, and Atlas remains intact for rollback.
+Migration progress (2026-11-06): `https://defibar.finance` serves Pages and `https://api.defibar.finance` serves Railway. Atlas `test.protocols` was transferred and verified as Railway `defibar.protocols`; private pre-cutover and post-update BSON archives are retained locally under Git-ignored `.migration-backups/`. Railway's 05:00 UTC updater schedule is configured; its first scheduled run is still pending. Heroku and Atlas remain available for rollback, and the AWS updater schedule is disabled.
 
 Local setup and test instructions are in `frontend/README.md`, `backend/README.md`, and `make-db-lambda/README.md`. The Lambda package remains until the Railway updater is proven and AWS is retired.
 

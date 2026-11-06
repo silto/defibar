@@ -28,3 +28,5 @@ npm run start-local
 `npm run build` regenerates GraphQL types and creates `out/`. `start-local` serves those files on port 4600 with Python 3; it does not run a Next.js server. The build uses webpack for SVG imports. Cloudflare Pages supplies HTTPS, so the old redirect middleware is gone.
 
 For Pages, use `frontend/` as the project root, `npm run build` as the build command, and `out` as the output directory. `.nvmrc` pins the build Node version. Set both public URL variables for production and preview builds.
+
+The Git-connected Pages project is `defibar`. Production serves `https://defibar.finance`; preview builds use `https://defibar.pages.dev`. Both environments currently build with `NEXT_PUBLIC_API_URL=https://api.defibar.finance` and `NEXT_PUBLIC_APP_URL=https://defibar.finance`. Change build variables in Pages before rebuilding; a running static site cannot read changed variables without a new build. The production branch is temporarily `codex/defibar-migration` until the migration is merged.

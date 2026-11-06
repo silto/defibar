@@ -1,6 +1,6 @@
 # DEFIBAR migration plan
 
-Updated 2026-11-06. Tickets 001–007 are complete; production cutover in 008 is next. Heroku and Atlas still serve the live site and production DNS still points to Heroku. The AWS updater is disabled; Railway holds the verified Atlas snapshot. Track implementation in [`tickets/`](tickets/).
+Updated 2026-11-06. Tickets 001–007 are complete; production cutover in 008 is live, pending the first scheduled Railway run. Cloudflare Pages serves `defibar.finance`, Railway serves `api.defibar.finance` and the private database. The AWS updater is disabled; Heroku and Atlas are retained for rollback. Track implementation in [`tickets/`](tickets/).
 
 ## Decisions
 
@@ -45,7 +45,7 @@ The repository has no current dependency audit or release checks. The frontend b
 - Use MongoDB Database Tools to transfer BSON plus metadata. Map `test.*` to `defibar.*` on restore, and set Railway API/cron connection strings to `/defibar`. Confirm version compatibility and use a private Railway connection for services. Atlas MCP can inspect data but cannot produce the BSON dump; obtain an authorized Atlas dump connection at execution time. [MongoDB dump/restore guidance](https://www.mongodb.com/docs/database-tools/mongorestore/mongorestore-examples/).
 - Compare frozen source and target counts, indexes, representative documents, and GraphQL search results. The 8,943 count is a 2026-11-06 baseline, not the final acceptance count.
 - Change the API DNS first: the old frontend can continue using `api.defibar.finance`. Switch the apex to Pages second. Preserve mail MX/TXT and unrelated DNS records.
-- Before Railway cron writes, rollback means restoring both DNS records to Heroku and re-enabling the AWS rule against unchanged Atlas. After a Railway write, take a fresh private BSON dump and explicitly reconcile data before any rollback to Atlas. Railway managed backups will remain disabled by user choice; the protocol dataset can also be rebuilt by the updater.
+- Before Railway cron writes, rollback means restoring both DNS records to Heroku and re-enabling the AWS rule against unchanged Atlas. Railway has now written after cutover. A fresh private Railway BSON dump is in `.migration-backups/`; restore/reconcile it to Atlas before re-enabling AWS if rolling back. Railway managed backups remain disabled by user choice; the protocol dataset can also be rebuilt by the updater.
 - Do not delete Atlas, Heroku, or AWS resources until production checks and one scheduled Railway run pass.
 
 ## Checks still needed during implementation
