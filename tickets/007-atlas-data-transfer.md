@@ -11,7 +11,7 @@ Status: Not started
 ## Work
 
 - Record frozen source count and recent updater status. Disable the AWS EventBridge rule and wait for active Lambda execution to finish.
-- Take an Atlas backup/snapshot. Dump the production `test` database with MongoDB Database Tools; restore to Railway as `defibar`, retaining `protocols` documents, `_id` values, and index metadata. Avoid credentials in shell history/logs.
+- Take an Atlas backup/snapshot. Dump the production `test` database with MongoDB Database Tools; restore to Railway as `defibar`, retaining `protocols` documents, `_id` values, and index metadata. Use Railway CLI's private SSH database tunnel if available, keeping the MongoDB TCP proxy disabled. Avoid credentials in shell history/logs.
 - Compare source and destination counts, indexes, representative documents, and API search results. Confirm target DB URI selects `defibar`.
 - Keep the AWS rule disabled and Atlas unchanged until cutover decision.
 
