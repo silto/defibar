@@ -1,6 +1,6 @@
 # DEFIBAR migration plan
 
-Updated 2026-11-06. Tickets 001–006 are complete; the final Atlas transfer in 007 is next. Heroku, Atlas, AWS, and production DNS still serve the live site. Track implementation in [`tickets/`](tickets/).
+Updated 2026-11-06. Tickets 001–007 are complete; production cutover in 008 is next. Heroku and Atlas still serve the live site and production DNS still points to Heroku. The AWS updater is disabled; Railway holds the verified Atlas snapshot. Track implementation in [`tickets/`](tickets/).
 
 ## Decisions
 
@@ -52,7 +52,7 @@ The repository has no current dependency audit or release checks. The frontend b
 
 - Package upgrades and dependency audits are recorded in tickets 002 and 004. Recheck before any later version bump.
 - Railway MongoDB 8.0 is provisioned privately in US East with a 1 GB volume; an authenticated SSH tunnel and API search passed. Complete the final manual BSON transfer in ticket 007. The user declined the Pro upgrade required for managed backups.
-- Obtain a usable Atlas dump connection and check source network access. Do not put credentials in tickets, logs, or shell history.
+- The frozen Atlas dump is retained privately in `.migration-backups/` (ignored by Git); ticket 007 records its checksum and restore comparison. Do not put credentials or the archive in Git, logs, or shell history.
 - Pages static export and browser search passed at `https://defibar.pages.dev/` against the Railway API. The build uses a temporary Railway API URL; switch to `https://api.defibar.finance` and rebuild at cutover. [Cloudflare Pages guide](https://developers.cloudflare.com/pages/framework-guides/nextjs/deploy-a-static-nextjs-site/); [Next static export guide](https://nextjs.org/docs/pages/guides/static-exports).
 
 ## Ticket maintenance

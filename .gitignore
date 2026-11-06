@@ -1,2 +1,5 @@
 # assets
 assets
+
+# Private migration archives; never commit production database snapshots.
+.migration-backups/
