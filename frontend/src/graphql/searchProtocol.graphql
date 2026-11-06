@@ -1,0 +1,10 @@
+query searchProtocol($query: String) {
+  searchProtocol(query: $query) {
+    id
+    name
+    url
+    logoUrl
+    symbol
+    tvl
+  }
+}

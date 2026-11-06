@@ -1,25 +1,16 @@
 import { useMemo } from 'react';
-import { ApolloClient, InMemoryCache, createHttpLink, NormalizedCacheObject } from '@apollo/client';
-import { setContext } from '@apollo/client/link/context';
+import { ApolloClient, HttpLink, InMemoryCache, NormalizedCacheObject } from '@apollo/client';
 
-let apolloClient: ApolloClient<NormalizedCacheObject>;
+let apolloClient: ApolloClient;
 
-const httpLink = createHttpLink({
+const httpLink = new HttpLink({
   uri: `${process.env.NEXT_PUBLIC_API_URL}/graphql`,
-});
-
-const authLink = setContext((_: unknown, { headers }: { headers: { [key: string]: string } }) => {
-  return {
-    headers: {
-      ...headers,
-    },
-  };
 });
 
 function createApolloClient() {
   return new ApolloClient({
     ssrMode: typeof window === 'undefined',
-    link: authLink.concat(httpLink),
+    link: httpLink,
     cache: new InMemoryCache(),
   });
 }

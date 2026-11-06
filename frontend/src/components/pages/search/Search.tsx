@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import Head from 'next/head';
 import type { NextPage } from 'next';
-import { gql } from '@apollo/client';
+import { useQuery } from '@apollo/client/react';
 // import Image from 'next/image';
 import SearchInput from '@/components/searchInput';
 import Info from '@/components/info';
-import DEFIBAR from '@/public/DEFIBAR_title.svg';
-// import borderImage from '@/public/border-image.svg';
-import { useSearchProtocolQuery } from '@/types/schema';
+import DEFIBAR from '../../../../public/DEFIBAR_title.svg';
+// import borderImage from '../../../../public/border-image.svg';
+import { SearchProtocolDocument } from '@/types/schema';
 
 import { RobotoSlab } from '@/lib/fonts';
 
@@ -24,43 +24,28 @@ import {
   ErrorContainer,
 } from './Search.style';
 
-const SEARCH_PROTOCOL_QUERY = gql`
-  query searchProtocol($query: String) {
-    searchProtocol(query: $query) {
-      id
-      name
-      url
-      logoUrl
-      symbol
-      tvl
-    }
+function isSafeProtocolUrl(value: string): boolean {
+  if (!/^https?:\/\//i.test(value) || /[\u0000-\u001f\u007f-\u009f]/.test(value)) return false;
+  try {
+    const url = new URL(value);
+    return (url.protocol === 'https:' || url.protocol === 'http:') && !url.username && !url.password;
+  } catch {
+    return false;
   }
-`;
-
-interface SearchFormElements extends HTMLFormControlsCollection {
-  protocolQuery: HTMLInputElement;
-}
-
-interface SearchFormElement extends HTMLFormElement {
-  readonly elements: SearchFormElements;
 }
 
 export const Search: NextPage = () => {
   const searchInput = React.useRef<HTMLInputElement>(null);
   const [query, setQuery] = useState<string>('');
-  const [initialFocus, setInitialFocus] = useState<boolean>(false);
-  const [delayDebounce, setDelayDebounce] = useState<ReturnType<typeof setTimeout> | null>(null);
+  const delayDebounce = React.useRef<ReturnType<typeof setTimeout> | null>(null);
   const [selectedProtocol, setSelectedProtocol] = useState<number | null>(null);
   const {
     // loading: searchLoading,
     error: searchError,
     variables: searchVariables,
     data: searchData,
-    loading,
-    networkStatus,
     refetch,
-  } = useSearchProtocolQuery({
-    query: SEARCH_PROTOCOL_QUERY,
+  } = useQuery(SearchProtocolDocument, {
     fetchPolicy: 'network-only',
     variables: {
       query,
@@ -68,7 +53,7 @@ export const Search: NextPage = () => {
     ssr: false,
   });
 
-  const protocols = searchData?.searchProtocol;
+  const protocols = searchData?.searchProtocol.filter((protocol) => isSafeProtocolUrl(protocol.url));
 
   // ____________ Handlers ____________
   const changeHandler = (e: React.ChangeEvent<HTMLInputElement>): void => {
@@ -77,7 +62,7 @@ export const Search: NextPage = () => {
     setSelectedProtocol(null);
   };
 
-  const handleSubmit = async (e: React.FormEvent<SearchFormElement>): Promise<void> => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
     e.stopPropagation();
     if (selectedProtocol !== null && protocols) {
@@ -85,7 +70,7 @@ export const Search: NextPage = () => {
       window.location.href = protocol.url;
       return;
     }
-    delayDebounce && clearTimeout(delayDebounce);
+    if (delayDebounce.current) clearTimeout(delayDebounce.current);
     const prevQuery = searchVariables?.query;
     let data;
     if (prevQuery === query && searchData?.searchProtocol) {
@@ -94,8 +79,9 @@ export const Search: NextPage = () => {
       const res = await refetch({ query });
       data = res?.data;
     }
-    if (data?.searchProtocol && data?.searchProtocol.length > 0) {
-      window.location.href = data.searchProtocol[0].url;
+    const firstNavigableProtocol = data?.searchProtocol.find((protocol) => isSafeProtocolUrl(protocol.url));
+    if (firstNavigableProtocol) {
+      window.location.href = firstNavigableProtocol.url;
     }
   };
 
@@ -129,22 +115,18 @@ export const Search: NextPage = () => {
 
   // ____________ useEffect Hooks ____________
   useEffect(() => {
-    delayDebounce && clearTimeout(delayDebounce);
-    const delayDebounceFn = setTimeout(() => {
-      refetch({ query });
+    const timer = setTimeout(() => {
+      void refetch({ query });
     }, 400);
-    setDelayDebounce(delayDebounceFn);
+    delayDebounce.current = timer;
     return () => {
-      delayDebounce && clearTimeout(delayDebounce);
+      clearTimeout(timer);
     };
-  }, [query]);
+  }, [query, refetch]);
 
   useEffect(() => {
-    if (searchInput.current && !initialFocus) {
-      searchInput.current.focus();
-      setInitialFocus(true);
-    }
-  }, [searchInput?.current, initialFocus]);
+    searchInput.current?.focus();
+  }, []);
 
   return (
     <>
