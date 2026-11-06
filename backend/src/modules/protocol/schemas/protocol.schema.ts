@@ -5,7 +5,7 @@ export type ProtocolDocument = HydratedDocument<Protocol>;
 
 @Schema()
 export class Protocol {
-  @Prop({ required: true })
+  @Prop({ required: true, unique: true })
   defiLlamaId: string;
 
   @Prop({ required: true })
@@ -14,7 +14,8 @@ export class Protocol {
   @Prop({ required: true })
   name: string;
 
-  @Prop({ required: true })
+  // DefiLlama leaves this blank for many protocols; the frontend must not link empty URLs.
+  @Prop()
   url: string;
 
   @Prop()

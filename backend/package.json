@@ -17,7 +17,8 @@
     "start:prod": "node dist/main",
     "lint": "eslint \"{src,test}/**/*.ts\"",
     "generate:typings": "ts-node ./src/generateTypings",
-    "makeProtocolDb": "ts-node ./src/scripts/makeProtocolDb",
+    "update:protocols": "node dist/scripts/makeProtocolDb.js",
+    "test:updater": "npm run build && node --test test/updater.test.cjs",
     "test": "npm run build && node --test test/unit.test.cjs",
     "test:integration": "npm run build && node --test test/integration.test.cjs"
   },
