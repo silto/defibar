@@ -1,6 +1,6 @@
 # DEFIBAR migration plan
 
-Updated 2026-11-06. Tickets 001–007 are complete; production cutover in 008 is live, pending the first scheduled Railway run. Cloudflare Pages serves `defibar.finance`, Railway serves `api.defibar.finance` and the private database. The AWS updater is disabled; Heroku and Atlas are retained for rollback. Track implementation in [`tickets/`](tickets/).
+Updated 2026-11-06. Tickets 001–008 are complete; the first scheduled Railway updater run succeeded. Cloudflare Pages serves `defibar.finance`, Railway serves `api.defibar.finance` and the private database. The AWS updater is disabled; Heroku and Atlas remain until ticket 009 retires them. Track implementation in [`tickets/`](tickets/).
 
 ## Decisions
 
