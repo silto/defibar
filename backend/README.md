@@ -54,7 +54,8 @@ npm run start:prod
 Set `DATABASE_URL` to an isolated database before local starts. The API listens on
 `PORT` (default `4500`) at `0.0.0.0`. `GET /health` pings MongoDB and returns 503
 when it is unavailable. Set `FRONTEND_URL` for the production browser origin and
-`FRONTEND_PREVIEW_URL` for one exact Cloudflare Pages preview origin. `SEARCH_LIMIT`
+`FRONTEND_PREVIEW_URL` for the project's `pages.dev` origin and its
+branch/deployment subdomains. Other `pages.dev` projects remain blocked. `SEARCH_LIMIT`
 defaults to 10 and must be an integer from 1 to 100.
 
 Run unit checks and an isolated HTTP integration check:

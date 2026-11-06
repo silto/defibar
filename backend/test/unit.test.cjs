@@ -3,13 +3,22 @@ const { test } = require("node:test");
 const { ServiceUnavailableException, BadRequestException } = require("@nestjs/common");
 const { AppController } = require("../dist/app.controller.js");
 const { allowedFrontendOrigins } = require("../dist/cors.js");
-const { ProtocolService, parseSearchLimit } = require("../dist/modules/protocol/protocol.service.js");
+const {
+  ProtocolService,
+  parseSearchLimit,
+} = require("../dist/modules/protocol/protocol.service.js");
 
 test("health checks the MongoDB connection", async () => {
   let pinged = false;
   const connected = new AppController({
     readyState: 1,
-    db: { admin: () => ({ ping: async () => { pinged = true; } }) },
+    db: {
+      admin: () => ({
+        ping: async () => {
+          pinged = true;
+        },
+      }),
+    },
   });
   assert.deepEqual(await connected.health(), { status: "ok" });
   assert.equal(pinged, true);
@@ -18,19 +27,37 @@ test("health checks the MongoDB connection", async () => {
   await assert.rejects(disconnected.health(), ServiceUnavailableException);
   const failedPing = new AppController({
     readyState: 1,
-    db: { admin: () => ({ ping: async () => { throw new Error("offline"); } }) },
+    db: {
+      admin: () => ({
+        ping: async () => {
+          throw new Error("offline");
+        },
+      }),
+    },
   });
   await assert.rejects(failedPing.health(), ServiceUnavailableException);
 });
 
-test("CORS allows only configured frontend origins", () => {
+test("CORS allows the configured origins and only this Pages project's previews", () => {
   assert.deepEqual(allowedFrontendOrigins({}), []);
+  const origins = allowedFrontendOrigins({
+    FRONTEND_URL: "https://defibar.finance",
+    FRONTEND_PREVIEW_URL: "https://defibar.pages.dev",
+  });
+  assert.deepEqual(origins.slice(0, 2), ["https://defibar.finance", "https://defibar.pages.dev"]);
+  assert.equal(origins.length, 3);
+  assert.ok(origins[2].test("https://feature-123.defibar.pages.dev"));
+  for (const untrusted of [
+    "http://feature.defibar.pages.dev",
+    "https://feature.evil.pages.dev",
+    "https://feature.defibar.pages.dev.evil.com",
+    "https://nested.feature.defibar.pages.dev",
+  ]) {
+    assert.equal(origins[2].test(untrusted), false);
+  }
   assert.deepEqual(
-    allowedFrontendOrigins({
-      FRONTEND_URL: "https://defibar.finance",
-      FRONTEND_PREVIEW_URL: "https://preview.pages.dev",
-    }),
-    ["https://defibar.finance", "https://preview.pages.dev"],
+    allowedFrontendOrigins({ FRONTEND_PREVIEW_URL: "https://preview.example.com" }),
+    ["https://preview.example.com"],
   );
 });
 
@@ -49,7 +76,12 @@ test("search uses literal regexes and bounds query length", async () => {
     find: (value) => {
       filter = value;
       return {
-        sort: () => ({ limit: async (value) => { resultLimit = value; return []; } }),
+        sort: () => ({
+          limit: async (value) => {
+            resultLimit = value;
+            return [];
+          },
+        }),
       };
     },
   };
